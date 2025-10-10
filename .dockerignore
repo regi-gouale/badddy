@@ -1,0 +1,11 @@
+node_modules
+.pnpm-store
+.pnpm
+.turbo
+.next
+out
+build
+dist
+coverage
+.git
+.gitignore
