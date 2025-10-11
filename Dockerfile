@@ -20,6 +20,7 @@ FROM base AS builder
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 RUN pnpm install --frozen-lockfile \
+  && pnpm --filter web exec prisma migrate deploy \
   && pnpm turbo run build
 
 FROM base AS runner
