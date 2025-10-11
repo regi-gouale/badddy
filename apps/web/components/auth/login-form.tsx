@@ -39,6 +39,7 @@ import {
   IconMailFilled,
   IconPasswordUser,
 } from "@tabler/icons-react";
+import { usePlausible } from "next-plausible";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -59,6 +60,8 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const plausible = usePlausible();
+
   const [isConnecting, setIsConnecting] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,6 +73,7 @@ export function LoginForm({
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    plausible("login");
     setIsConnecting(true);
     const resultUser = await authClient.signIn.email({
       email: data.email,
