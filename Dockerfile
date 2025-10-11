@@ -19,9 +19,9 @@ COPY packages/typescript-config/package.json packages/typescript-config/package.
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
   pnpm install --frozen-lockfile
 
+RUN echo ${DATABASE_URL}
+
 FROM base AS builder
-ARG DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder"
-ENV DATABASE_URL=${DATABASE_URL}
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 RUN pnpm install --frozen-lockfile \
