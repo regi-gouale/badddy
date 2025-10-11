@@ -38,6 +38,7 @@ services:
       NODE_ENV: production
       PORT: "8081"
       BACKEND_URL: http://backend:3001
+
     depends_on:
       - backend
     ports:

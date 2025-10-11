@@ -4,7 +4,10 @@ FROM node:20-bookworm-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="${PNPM_HOME}:${PATH}"
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN corepack enable
+RUN corepack enable \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends openssl \
+  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 FROM base AS deps
@@ -17,10 +20,12 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
   pnpm install --frozen-lockfile
 
 FROM base AS builder
+ARG DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder"
+ENV DATABASE_URL=${DATABASE_URL}
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 RUN pnpm install --frozen-lockfile \
-  && pnpm --filter web exec prisma migrate deploy \
+  && pnpm --filter web exec prisma generate \
   && pnpm turbo run build
 
 FROM base AS runner
