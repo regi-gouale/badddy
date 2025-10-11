@@ -6,9 +6,19 @@ import { jwt, organization, twoFactor } from "better-auth/plugins";
 import Stripe from "stripe";
 
 const prisma = new PrismaClient();
-const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-08-27.basil",
-});
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+const stripePlugin =
+  stripeSecretKey && stripeWebhookSecret
+    ? stripe({
+        stripeClient: new Stripe(stripeSecretKey, {
+          apiVersion: "2025-08-27.basil",
+        }),
+        stripeWebhookSecret,
+        createCustomerOnSignUp: true,
+      })
+    : null;
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
   appName: "Badddy",
   database: prismaAdapter(prisma, {
@@ -21,10 +31,6 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     twoFactor(),
     organization(),
     jwt(),
-    stripe({
-      stripeClient,
-      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
-      createCustomerOnSignUp: true,
-    }),
+    ...(stripePlugin ? [stripePlugin] : []),
   ],
 });
