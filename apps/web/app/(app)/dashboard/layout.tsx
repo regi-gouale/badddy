@@ -36,10 +36,10 @@ export default async function DashboardLayout({
     );
   }
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen size-full flex flex-1 items-center p-4">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="w-64 min-h-screen bg-white border-r">
+        <aside className="w-64 min-h-screen border-r">
           <nav className="p-4">{/* Add navigation items here */}</nav>
         </aside>
 
