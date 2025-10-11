@@ -1,5 +1,13 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export default async function DashboardLayout({
@@ -12,14 +20,18 @@ export default async function DashboardLayout({
   });
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="bg-white p-8 rounded shadow text-center">
-          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
-          <p className="mb-4">You must be logged in to view this page.</p>
-          <a href="/login" className="text-blue-500 hover:underline">
-            Go to Login
-          </a>
-        </div>
+      <div className="size-full flex flex-1 items-center justify-center p-4 min-h-screen">
+        <Card className="w-full max-w-sm">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl font-bold">Access Denied</CardTitle>
+          </CardHeader>
+          <CardDescription className="mb-4 p-8 text-center">
+            <p>You must be logged in to view this page.</p>
+            <Button asChild variant="outline" className="mt-4">
+              <Link href="/login">Go to Login</Link>
+            </Button>
+          </CardDescription>
+        </Card>
       </div>
     );
   }

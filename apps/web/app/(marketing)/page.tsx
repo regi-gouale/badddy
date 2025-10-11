@@ -11,8 +11,8 @@ export default function Home() {
     >
       Hello
       <span className="text-4xl">World</span>
-      <Button size={"lg"} asChild>
-        <Link className="text-primary-foreground" href="/dashboard">
+      <Button size={"lg"} asChild variant={"outline"}>
+        <Link className="" href="/dashboard">
           Go to Dashboard
         </Link>
       </Button>
