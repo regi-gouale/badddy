@@ -11,13 +11,13 @@ services:
       - start:prod
     environment:
       NODE_ENV: production
-      PORT: "${BACKEND_PORT}"
+      PORT: "3001"
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
     env_file:
       - .env
     ports:
-      - "${BACKEND_PORT}:3000"
+      - "3001:3000"
 
   web:
     container_name: web
@@ -37,11 +37,11 @@ services:
       - "8080"
     environment:
       NODE_ENV: production
-      PORT: ${FRONTEND_PORT}
+      PORT: 8081
       BACKEND_URL: ${BACKEND_URL}
     env_file:
       - .env
     depends_on:
       - backend
     ports:
-      - "${FRONTEND_PORT}:8080"
+      - "8081:8080"
