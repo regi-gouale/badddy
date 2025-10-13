@@ -1,3 +1,4 @@
+import { ApiHealthProvider } from "@/components/providers/api-health-provider";
 import { ReactQueryProvider } from "@/components/providers/react-query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
@@ -117,11 +118,17 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ReactQueryProvider>
-              <NuqsAdapter>
-                <main className="min-h-screen w-full bg-background text-foreground">
-                  {children}
-                </main>
-              </NuqsAdapter>
+              <ApiHealthProvider
+                checkInterval={60000}
+                showNotifications={true}
+                protectedRoutesOnly={true}
+              >
+                <NuqsAdapter>
+                  <main className="min-h-screen w-full bg-background text-foreground">
+                    {children}
+                  </main>
+                </NuqsAdapter>
+              </ApiHealthProvider>
             </ReactQueryProvider>
             <ToasterProvider />
           </ThemeProvider>
