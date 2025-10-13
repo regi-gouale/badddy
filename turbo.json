@@ -8,6 +8,8 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "BETTER_AUTH_URL",
+        "NEXT_PUBLIC_BASE_URL",
+        "NEXT_PUBLIC_BETTER_AUTH_URL",
         "DATABASE_URL",
         "BETTER_AUTH_SECRET",
         "STRIPE_SECRET_KEY",
@@ -38,6 +40,8 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "BETTER_AUTH_URL",
+        "NEXT_PUBLIC_BASE_URL",
+        "NEXT_PUBLIC_BETTER_AUTH_URL",
         "DATABASE_URL",
         "BETTER_AUTH_SECRET",
         "STRIPE_SECRET_KEY",

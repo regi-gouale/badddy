@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { jwt, organization, twoFactor } from "better-auth/plugins";
 import Stripe from "stripe";
+import { emailApiServer } from "./email-api";
 
 const prisma = new PrismaClient();
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
@@ -32,11 +33,19 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     verifyEmailTokenLength: 48,
     emailVerificationTokenExpiresIn: 1000 * 60 * 60 * 24, // 24 hours
     resetPasswordTokenExpiresIn: 1000 * 60 * 15, // 15 minutes
-    sendResetPassword: async (email, token) => {
-      // Envoyer l'email de réinitialisation du mot de passe
+    sendResetPassword: async ({ user, token }) => {
+      const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
+      
       console.log(
-        `Envoyer un email de réinitialisation du mot de passe à ${email} avec le token : ${token}`
+        `📧 Envoi email de réinitialisation du mot de passe à ${user.email}`
       );
+      console.log(`🔗 Reset URL: ${resetUrl}`);
+      
+      await emailApiServer.sendResetPasswordEmail({
+        to: user.email!,
+        userName: user.name || "Utilisateur",
+        resetUrl,
+      });
     },
   },
   plugins: [

@@ -31,11 +31,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getResponse()
         : 'Internal server error';
 
-    // Log l'erreur avec le stack trace
+    // Log l'erreur avec le stack trace ET les détails de validation
     this.logger.error(
       `${request.method} ${request.url} - Status: ${status}`,
       exception instanceof Error ? exception.stack : JSON.stringify(exception),
     );
+
+    // Log supplémentaire pour les erreurs de validation (BadRequest)
+    if (status === 400 && typeof message === 'object') {
+      this.logger.error(
+        'Validation details:',
+        JSON.stringify(message, null, 2),
+      );
+      this.logger.error('Request body:', JSON.stringify(request.body, null, 2));
+    }
 
     // Envoie une réponse formatée
     response.status(status).json({

@@ -18,6 +18,11 @@ async function bootstrap() {
       whitelist: true, // Supprime les propriétés non définies dans le DTO
       forbidNonWhitelisted: true, // Rejette les requêtes avec des propriétés non autorisées
       transform: true, // Transforme automatiquement les types
+      disableErrorMessages: false, // Affiche les messages d'erreur détaillés
+      validationError: {
+        target: false,
+        value: true,
+      },
     }),
   );
 
