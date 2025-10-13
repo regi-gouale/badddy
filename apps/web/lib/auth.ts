@@ -35,12 +35,12 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     resetPasswordTokenExpiresIn: 1000 * 60 * 15, // 15 minutes
     sendResetPassword: async ({ user, token }) => {
       const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
-      
+
       console.log(
         `📧 Envoi email de réinitialisation du mot de passe à ${user.email}`
       );
       console.log(`🔗 Reset URL: ${resetUrl}`);
-      
+
       await emailApiServer.sendResetPasswordEmail({
         to: user.email!,
         userName: user.name || "Utilisateur",

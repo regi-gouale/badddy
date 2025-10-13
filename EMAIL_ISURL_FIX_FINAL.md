@@ -7,6 +7,7 @@ L'URL `http://localhost:3000/reset-password?token=...` était **valide** mais re
 ### Pourquoi ?
 
 Par défaut, `@IsUrl()` de `class-validator` **exige un TLD (Top Level Domain)** :
+
 - ✅ `http://example.com/path` → Valide (`.com` est un TLD)
 - ❌ `http://localhost/path` → **Invalide** (pas de TLD)
 
@@ -30,7 +31,7 @@ export class SendResetPasswordEmailDto {
   @IsNotEmpty()
   userName: string;
 
-  @IsUrl({ require_tld: false })  // ← Accepte localhost !
+  @IsUrl({ require_tld: false }) // ← Accepte localhost !
   @IsNotEmpty()
   resetUrl: string;
 }
@@ -48,7 +49,7 @@ export class SendVerificationEmailDto {
   @IsNotEmpty()
   userName: string;
 
-  @IsUrl({ require_tld: false })  // ← Accepte localhost !
+  @IsUrl({ require_tld: false }) // ← Accepte localhost !
   @IsNotEmpty()
   verificationUrl: string;
 }
@@ -58,17 +59,18 @@ export class SendVerificationEmailDto {
 
 Avec `require_tld: false`, les URLs suivantes sont maintenant **valides** :
 
-| URL | Avant | Après |
-|-----|-------|-------|
-| `http://localhost:3000/reset-password` | ❌ | ✅ |
-| `http://localhost:3000/verify` | ❌ | ✅ |
-| `http://192.168.1.1/path` | ❌ | ✅ |
-| `http://example.com/path` | ✅ | ✅ |
-| `https://app.production.com/reset` | ✅ | ✅ |
+| URL                                    | Avant | Après |
+| -------------------------------------- | ----- | ----- |
+| `http://localhost:3000/reset-password` | ❌    | ✅    |
+| `http://localhost:3000/verify`         | ❌    | ✅    |
+| `http://192.168.1.1/path`              | ❌    | ✅    |
+| `http://example.com/path`              | ✅    | ✅    |
+| `https://app.production.com/reset`     | ✅    | ✅    |
 
 ## 🔒 Sécurité
 
 Cette option est **sûre** car :
+
 - Elle accepte les URLs sans TLD (localhost, IPs)
 - Elle **rejette toujours** les chaînes invalides comme `not-a-url` ou `javascript:alert(1)`
 - Elle valide toujours le protocole (`http://` ou `https://`)
@@ -96,12 +98,14 @@ Le backend va recompiler automatiquement. Testez maintenant :
 ### Logs attendus
 
 **Backend** :
+
 ```
 POST /api/v1/email/reset-password 200 in 234ms
 [EmailService] Email sent successfully to regi@gouale.com
 ```
 
 **Frontend** :
+
 ```
 📧 Envoi email de réinitialisation du mot de passe à regi@gouale.com
 🔗 Reset URL: http://localhost:3000/reset-password?token=abc123...
@@ -117,6 +121,6 @@ Source: [class-validator IsUrl options](https://github.com/typestack/class-valid
 
 ## 🎉 Résultat
 
-L'erreur **"resetUrl must be a URL address"** est maintenant **définitivement corrigée** ! 
+L'erreur **"resetUrl must be a URL address"** est maintenant **définitivement corrigée** !
 
 Les URLs `localhost` sont acceptées en développement, et les URLs de production avec TLD fonctionneront également ! 🚀

@@ -5,12 +5,14 @@
 L'erreur de validation était causée par une **URL incorrecte** :
 
 ### ❌ Avant (invalide)
+
 ```
 http://localhost:3000/api/v1/reset-password?token=abc123
                       ^^^^^^^^ ERREUR !
 ```
 
 ### ✅ Après (correct)
+
 ```
 http://localhost:3000/reset-password?token=abc123
 ```
@@ -32,6 +34,7 @@ Les logs détaillés ont révélé le problème :
 ### Pourquoi l'URL était considérée comme invalide ?
 
 Le validateur `@IsUrl()` de NestJS considère cette URL comme **invalide** car :
+
 - `/api/v1` est le **préfixe des endpoints backend**
 - La page frontend de réinitialisation est à `/reset-password`
 - Confusion entre **endpoint API** et **page frontend**
@@ -44,10 +47,10 @@ Le validateur `@IsUrl()` de NestJS considère cette URL comme **invalide** car :
 sendResetPassword: async ({ user, token }) => {
   const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
   //                                                     ^^^ Sans /api/v1 !
-  
+
   console.log(`📧 Envoi email de réinitialisation du mot de passe à ${user.email}`);
   console.log(`🔗 Reset URL: ${resetUrl}`);
-  
+
   await emailApiServer.sendResetPasswordEmail({
     to: user.email!,
     userName: user.name || "Utilisateur",
@@ -58,10 +61,10 @@ sendResetPassword: async ({ user, token }) => {
 
 ## 📋 Distinction importante
 
-| Type | Chemin | Usage |
-|------|--------|-------|
-| **Endpoint API Backend** | `/api/v1/email/reset-password` | Pour envoyer l'email via NestJS |
-| **Page Frontend** | `/reset-password` | Pour que l'utilisateur clique dans l'email |
+| Type                     | Chemin                         | Usage                                      |
+| ------------------------ | ------------------------------ | ------------------------------------------ |
+| **Endpoint API Backend** | `/api/v1/email/reset-password` | Pour envoyer l'email via NestJS            |
+| **Page Frontend**        | `/reset-password`              | Pour que l'utilisateur clique dans l'email |
 
 ### Flux complet
 
@@ -82,6 +85,7 @@ apps/web/app/(auth)/reset-password/page.tsx
 ```
 
 Cette page devra :
+
 - Récupérer le token depuis l'URL (`?token=...`)
 - Afficher un formulaire pour entrer le nouveau mot de passe
 - Appeler `authClient.resetPassword({ token, newPassword })`
@@ -98,12 +102,14 @@ Testez maintenant le formulaire `/forgot-password` :
 ### Logs attendus
 
 **Frontend** :
+
 ```
 📧 Envoi email de réinitialisation du mot de passe à regi@gouale.com
 🔗 Reset URL: http://localhost:3000/reset-password?token=abc123...
 ```
 
 **Backend** :
+
 ```
 POST /api/v1/email/reset-password 200 in 234ms
 [EmailService] Email sent successfully to regi@gouale.com
