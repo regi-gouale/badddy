@@ -7,14 +7,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { User } from '../types/user.interface';
 
 interface AuthenticatedRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    name: string;
-    [key: string]: unknown;
-  };
+  user?: User;
 }
 
 // Singleton pour l'import dynamique de jose (une seule fois au démarrage)
