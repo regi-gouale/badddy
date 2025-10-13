@@ -23,9 +23,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { IconRestore } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useState } from "react";
-import { IconRestore } from "@tabler/icons-react";
 
 // Schema for email validation
 const formSchema = z.object({
@@ -41,6 +42,7 @@ const formSchema = z.object({
 export function ForgotPasswordForm() {
   const [email, setEmail] = useQueryState("email");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,6 +70,8 @@ export function ForgotPasswordForm() {
         "Un email de réinitialisation de mot de passe a été envoyé si l'adresse existe.",
         { duration: 5000 }
       );
+      form.reset();
+      router.push("/login");
     }
     setIsLoading(false);
   }
