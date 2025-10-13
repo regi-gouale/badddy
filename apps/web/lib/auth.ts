@@ -27,6 +27,17 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
+    resetPasswordTokenLength: 48,
+    verifyEmailTokenLength: 48,
+    emailVerificationTokenExpiresIn: 1000 * 60 * 60 * 24, // 24 hours
+    resetPasswordTokenExpiresIn: 1000 * 60 * 15, // 15 minutes
+    sendResetPassword: async (email, token) => {
+      // Envoyer l'email de réinitialisation du mot de passe
+      console.log(
+        `Envoyer un email de réinitialisation du mot de passe à ${email} avec le token : ${token}`
+      );
+    },
   },
   plugins: [
     twoFactor(),

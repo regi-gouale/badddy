@@ -1,6 +1,7 @@
 "use client";
 
 import { IconBrandGoogleFilled } from "@tabler/icons-react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 type WithGoogleButtonProps = {
@@ -16,9 +17,11 @@ export default function WithGoogleButton({
     if (isLogin) {
       // Handle login with Google
       console.log("Login with Google");
+      toast.info("Connexion avec Google non implémentée");
     } else {
       // Handle sign up with Google
       console.log("Sign up with Google");
+      toast.info("Inscription avec Google non implémentée");
     }
   }
   return (

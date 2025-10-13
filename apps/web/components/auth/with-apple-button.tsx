@@ -1,6 +1,7 @@
 "use client";
 
 import { IconBrandAppleFilled } from "@tabler/icons-react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 
 type WithAppleButtonProps = {
@@ -18,9 +19,11 @@ export function WithAppleButton({
     if (isLogin) {
       // Handle login with Apple
       console.log("Login with Apple");
+      toast.info("Connexion avec Apple non implémentée");
     } else {
       // Handle sign up with Apple
       console.log("Sign up with Apple");
+      toast.info("Inscription avec Apple non implémentée");
     }
   }
   return (
