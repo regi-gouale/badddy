@@ -19,13 +19,12 @@ COPY packages/typescript-config/package.json packages/typescript-config/package.
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
   pnpm install --frozen-lockfile
 
-RUN echo ${DATABASE_URL}
-
 FROM base AS builder
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
+RUN env > /apps/web/.env.local
 RUN pnpm install --frozen-lockfile \
-  && pnpm --filter web exec prisma generate \
+  && pnpm --filter web prisma generate \
   && pnpm turbo run build
 
 FROM base AS runner

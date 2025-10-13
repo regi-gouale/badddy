@@ -3,6 +3,10 @@ node_modules
 .pnpm
 .turbo
 .next
+apps/web/.next
+apps/web/out
+apps/backend/dist
+apps/web/generated/prisma
 out
 build
 dist
