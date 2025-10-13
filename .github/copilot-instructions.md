@@ -1,0 +1,25 @@
+# Copilot Instructions
+
+- **Architecture**: Turborepo managed by `turbo.json`; primary apps live in `apps/backend` (NestJS REST API) and `apps/web` (Next.js App Router). Shared configs live under `packages/*`.
+- **Package manager**: Always use `pnpm` with workspaces; root scripts proxy to `turbo run`. Avoid `npm`/`yarn` commands.
+- **Backend basics**: `apps/backend/src/main.ts` sets the global prefix `api/v1` and enables CORS. New controllers should respect that prefix and be registered through `AppModule`.
+- **Backend testing**: Run `pnpm --filter backend test` for unit specs in `src/**/*.spec.ts`; add new specs alongside implementations.
+- **Backend build**: `pnpm --filter backend run deploy-build` compiles to `dist/`; Dockerfile uses this output, so keep build artifacts stable.
+- **Backend ports**: Local dev listens on `8080`; Docker overrides to `4000` at runtime, so expose configuration via env vars rather than hardcoding URLs.
+- **Frontend basics**: `apps/web` uses Next.js 15 App Router with parallel routes (`(marketing)`, `(auth)`, `(app)` folders). Page-level layouts and metadata live beside route segments.
+- **Frontend providers**: Global providers (`ThemeProvider`, `ReactQueryProvider`, `ToasterProvider`) are wired in `app/layout.tsx`; reuse them instead of re-instantiating providers in child components.
+- **Auth integration**: Authentication flows rely on Better Auth. Server config is in `apps/web/lib/auth.ts`; the client wrapper lives in `apps/web/lib/auth-client.ts`. Extend auth by composing Better Auth plugins in those files.
+- **Auth API**: Route handler `app/api/auth/[...all]/route.ts` exports `GET`/`POST` from Better Auth. Add custom auth HTTP handlers here instead of creating new API routes elsewhere.
+- **Database**: Prisma schema is in `apps/web/prisma/schema.prisma` with migrations under `prisma/migrations`. Generated client outputs to `apps/web/generated/prisma`; never edit generated files manually.
+- **Prisma workflows**: Use `pnpm --filter web exec prisma migrate dev` during development and `pnpm --filter web run deploy-build` for CI/CD (`prisma generate && prisma migrate deploy && next build`).
+- **Env vars**: Core variables (`DATABASE_URL`, `BETTER_AUTH_SECRET`, Stripe keys, `BACKEND_INTERNAL_URL`, `NEXT_PUBLIC_BETTER_AUTH_URL`) are surfaced in `turbo.json`. Add new required vars there so turbo caches rebuild correctly.
+- **HTTP proxying**: `apps/web/next.config.js` rewrites `/api/v1/*` to the backend. Client-side fetches to `/api/v1` automatically reach the Nest API; avoid hardcoded backend URLs in components.
+- **Styling/UI**: Tailwind CSS utilities with shadcn-inspired components reside under `apps/web/components/ui`. Prefer composing these primitives instead of redefining styles.
+- **Utilities**: Use the `cn` helper from `apps/web/lib/utils.ts` for class merging to avoid conflicting Tailwind classes.
+- **Analytics**: `PlausibleProvider` is registered in the root layout; track events via `usePlausible` (see `components/auth/login-form.tsx` for an example).
+- **TypeScript config**: `@/` alias maps to `apps/web`; respect this in imports. Backend sticks to relative imports unless Nest path mapping is added.
+- **Linting & types**: Execute `pnpm lint` / `pnpm check-types` at root (delegates via turbo). ESLint rules live in `packages/eslint-config`.
+- **Local dev**: `pnpm dev` runs both apps without caching; if you only need one app, filter (`pnpm --filter web dev`).
+- **Production start**: `pnpm start` (root) triggers turbo `start` targets (`next start`, `nest start --port 8080`). Ensure any new long-running task fits this convention.
+- **Docker**: `docker-compose.yml` builds from the monorepo using the two-stage Dockerfiles. When adding dependencies, confirm they are installed in the build stage or runtime stage as appropriate.
+- **CI expectations**: Treat `deploy-build` scripts as the CI/CD entry point. Keep them idempotent and avoid interactive prompts.
