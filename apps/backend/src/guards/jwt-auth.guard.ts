@@ -17,11 +17,15 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
+// Singleton pour l'import dynamique de jose (une seule fois au démarrage)
+let joseModule: typeof import('jose') | null = null;
+let jwksInstance: ReturnType<typeof import('jose').createRemoteJWKSet> | null =
+  null;
+
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  private jwksUrl: string;
-  private JWKS: any;
-  private joseModule: any;
+  private readonly issuer: string;
+  private readonly jwksUrl: string;
 
   constructor(private reflector: Reflector) {
     // URL du service web où Better Auth expose les clés publiques
@@ -30,18 +34,22 @@ export class JwtAuthGuard implements CanActivate {
       process.env.BETTER_AUTH_URL ||
       'http://localhost:3000';
     this.jwksUrl = `${webServiceUrl}/api/auth/jwks`;
+    this.issuer = webServiceUrl;
   }
 
-  private async initializeJose() {
-    if (!this.joseModule) {
-      // Import dynamique de jose pour supporter ESM dans CommonJS
-      this.joseModule = await import('jose');
-      this.JWKS = this.joseModule.createRemoteJWKSet(new URL(this.jwksUrl));
+  /**
+   * Initialise jose une seule fois (singleton pattern)
+   * Import dynamique nécessaire car jose est un module ESM
+   */
+  private async initializeJose(): Promise<void> {
+    if (!joseModule) {
+      joseModule = await import('jose');
+      jwksInstance = joseModule.createRemoteJWKSet(new URL(this.jwksUrl));
     }
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Initialise jose si ce n'est pas déjà fait
+    // Initialise jose si ce n'est pas déjà fait (une seule fois)
     await this.initializeJose();
 
     // Vérifie si la route est publique
@@ -70,21 +78,27 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       // Valide le JWT en utilisant les clés publiques du JWKS endpoint
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      const { payload } = await this.joseModule.jwtVerify(token, this.JWKS, {
-        issuer: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
+      const { payload } = await joseModule!.jwtVerify(token, jwksInstance!, {
+        issuer: this.issuer,
       });
 
-      // Attache les informations de l'utilisateur à la requête
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // Validation stricte des données du payload
+      const userId = typeof payload.sub === 'string' ? payload.sub : null;
+      const userEmail =
+        typeof payload.email === 'string' ? payload.email : null;
+      const userName = typeof payload.name === 'string' ? payload.name : null;
+
+      if (!userId || !userEmail) {
+        throw new UnauthorizedException(
+          'Invalid token payload: missing required fields',
+        );
+      }
+
+      // Attache les informations validées de l'utilisateur à la requête
       request.user = {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        id: (payload.sub as string) || '',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        email: (payload.email as string) || '',
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        name: (payload.name as string) || '',
-        ...payload,
+        id: userId,
+        email: userEmail,
+        name: userName || '',
       };
 
       return true;

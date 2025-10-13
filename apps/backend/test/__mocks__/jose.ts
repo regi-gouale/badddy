@@ -1,7 +1,9 @@
 // Mock pour la bibliothèque jose utilisée dans les tests E2E
 // Ce mock permet d'éviter les problèmes de transformation ESM dans Jest
 
-export const createRemoteJWKSet = jest.fn().mockReturnValue({});
+const mockJWKS = jest.fn();
+
+export const createRemoteJWKSet = jest.fn().mockReturnValue(mockJWKS);
 
 export const jwtVerify = jest.fn().mockResolvedValue({
   payload: {
@@ -17,3 +19,9 @@ export interface JWTPayload {
   name?: string;
   [key: string]: unknown;
 }
+
+// Export par défaut pour l'import dynamique
+export default {
+  createRemoteJWKSet,
+  jwtVerify,
+};
