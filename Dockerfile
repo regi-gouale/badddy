@@ -23,14 +23,14 @@ FROM base AS builder
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 RUN pnpm install --frozen-lockfile \
-&& pnpm --filter web prisma generate \
-&& pnpm turbo run build
+  && pnpm --filter web exec prisma generate \
+  && pnpm turbo run build
 
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=builder /app ./
-RUN env > /apps/web/.env.local
+RUN env > /app/apps/web/.env.local
 EXPOSE 3000
 EXPOSE 8080
 CMD ["pnpm", "start"]
