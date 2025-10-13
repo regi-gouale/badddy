@@ -11,6 +11,7 @@ RUN corepack enable \
 WORKDIR /app
 
 FROM base AS deps
+WORKDIR /app
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json turbo.json ./
 COPY apps/backend/package.json apps/backend/package.json
 COPY apps/web/package.json apps/web/package.json
@@ -23,14 +24,15 @@ FROM base AS builder
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 RUN pnpm install --frozen-lockfile \
-  && pnpm --filter web exec prisma generate \
-  && pnpm turbo run build
+&& pnpm --filter web exec prisma generate \
+&& pnpm turbo run build
+RUN pwd && ls -la && sleep 20
+RUN env > /apps/web/.env
 
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=builder /app ./
-RUN env > /app/apps/web/.env.local
 EXPOSE 3000
 EXPOSE 8080
 CMD ["pnpm", "start"]
