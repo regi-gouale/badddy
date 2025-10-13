@@ -13,7 +13,8 @@
         "STRIPE_SECRET_KEY",
         "STRIPE_PUBLISHABLE_KEY",
         "STRIPE_WEBHOOK_SECRET",
-        "USESEND_APIKEY"
+        "USESEND_APIKEY",
+        "BACKEND_INTERNAL_URL"
       ]
     },
     "lint": {
@@ -42,7 +43,8 @@
         "STRIPE_SECRET_KEY",
         "STRIPE_PUBLISHABLE_KEY",
         "STRIPE_WEBHOOK_SECRET",
-        "USESEND_APIKEY"
+        "USESEND_APIKEY",
+        "BACKEND_INTERNAL_URL"
       ]
     }
   }

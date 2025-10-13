@@ -9,7 +9,12 @@ import {
 export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
   {
     appName: "Badddy",
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:8080",
+    baseURL:
+      process.env.NEXT_PUBLIC_BETTER_AUTH_URL ??
+      process.env.BETTER_AUTH_URL ??
+      (typeof window !== "undefined"
+        ? window.location.origin
+        : "http://localhost:8080"),
     plugins: [
       twoFactorClient(),
       organizationClient(),

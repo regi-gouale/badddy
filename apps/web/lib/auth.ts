@@ -21,6 +21,7 @@ const stripePlugin =
     : null;
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
   appName: "Badddy",
+  secret: process.env.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
