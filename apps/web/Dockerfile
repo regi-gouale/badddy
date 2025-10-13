@@ -32,16 +32,7 @@ RUN pnpm run deploy-build
 # STAGE 2 : Run
 # -----------------------------
 FROM builder AS runner
-RUN npm install -g pnpm
-
-WORKDIR /app
-
-COPY --from=builder /app/apps/web/.next ./.next
-COPY --from=builder /app/apps/web/public ./public
-COPY --from=builder /app/apps/web/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-
-RUN pnpm install --prod --filter ./apps/web...
+WORKDIR /app/apps/web
 
 ENV NODE_ENV=production
 ENV PORT=3000
