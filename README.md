@@ -1,3 +1,171 @@
+<!--
+  README principal du dépôt Badddy
+  Rédigé en français — axé développeur·euse
+-->
+
+# Badddy
+
+Badddy est une application full‑stack en monorepo (Turborepo) qui réunit :
+
+- un backend REST construit avec NestJS (Prisma + PostgreSQL)
+- une application frontend Next.js (App Router, Tailwind, shadcn/ui)
+- une intégration d'authentification via Better Auth (JWT/JWKS)
+
+Ce README vise les contributeurs·rices et développeur·euses qui veulent installer, lancer et étendre le projet.
+
+## Pourquoi ce projet ?
+
+- Architecture monorepo (Turborepo) facilitant le développement simultané frontend/backend.
+- Auth centralisée avec Better Auth pour prototyper flows OAuth/JWT rapidement.
+- Boilerplate prêt pour production : Docker, migrations Prisma, et scripts CI/CD via `turbo`.
+
+## Contenu du dépôt
+
+- `apps/backend/` — API NestJS exposant `/api/v1/*` (JWT validation, Swagger, Prisma)
+- `apps/web/` — Application Next.js (App Router) avec intégration Better Auth
+- `packages/` — Configs partagées (ESLint, TypeScript)
+- fichiers utilitaires & docs à la racine : `DEPLOYMENT_GUIDE.md`, `CHECKLIST.md`, `CODE_REVIEW_REPORT.md`, etc.
+
+Pour plus de détails : consultez `apps/backend/README.md` et `apps/web/README.md`.
+
+## Prérequis
+
+- Node.js >= 18
+- pnpm (le workspace est géré avec pnpm)
+- PostgreSQL (ou une base compatible pour Prisma)
+
+## Démarrage rapide (développement)
+
+1. Installer les dépendances à la racine :
+
+```bash
+pnpm install
+```
+
+2. Copier les fichiers d'exemple d'env et ajuster les variables :
+
+```bash
+cp apps/web/.env.example apps/web/.env
+cp apps/backend/.env.example apps/backend/.env
+# Editez les .env pour fournir DATABASE_URL, BACKEND_INTERNAL_URL, NEXT_PUBLIC_BETTER_AUTH_URL, etc.
+```
+
+3. Lancer les deux applications en local (Turborepo) :
+
+```bash
+pnpm dev
+```
+
+Ou démarrer uniquement l'une des apps :
+
+```bash
+pnpm --filter web dev      # frontend
+pnpm --filter backend dev  # backend
+```
+
+Après démarrage :
+
+- Frontend : http://localhost:3000
+- Backend : http://localhost:8080 (Swagger : http://localhost:8080/api/v1/docs)
+
+## Scripts utiles
+
+Exemples de commandes au niveau racine :
+
+```bash
+pnpm dev          # Démarrage en dev (tous les services configurés)
+pnpm build        # Build de tous les packages via turbo
+pnpm deploy-build # Build utilisé en CI/CD (voir turbo.json)
+pnpm lint         # Lint (ESLint)
+pnpm check-types  # Vérification TypeScript
+```
+
+Commandes ciblées :
+
+```bash
+pnpm --filter backend test        # Tests backend
+pnpm --filter backend deploy-build
+pnpm --filter web dev             # Lancer le frontend seul
+```
+
+> Le projet utilise `turbo` pour orchestrer les tâches entre les packages ; les variables d'environnement listées dans `turbo.json` sont utilisées pendant les builds.
+
+## Variables d'environnement importantes
+
+Vérifiez et ajustez `apps/backend/.env` et `apps/web/.env` avant d'exécuter :
+
+- `DATABASE_URL` — chaîne de connexion PostgreSQL
+- `BETTER_AUTH_URL` / `NEXT_PUBLIC_BETTER_AUTH_URL` — URL de Better Auth
+- `BACKEND_INTERNAL_URL` / `NEXT_PUBLIC_BACKEND_URL` — URL interne/externe du backend
+- `BETTER_AUTH_SECRET` — secret pour Better Auth (si utilisé)
+
+Pour une liste complète, consultez les fichiers `.env.example` dans chaque app.
+
+## Auth (résumé)
+
+Le frontend gère l'authentification via Better Auth. Les requêtes au backend doivent inclure le JWT dans l'en-tête `Authorization: Bearer <token>` ; le backend valide la signature via JWKS.
+
+Points d'entrée :
+
+- Endpoint JWKS : `/api/auth/jwks` (exposé par le frontend/Better Auth)
+- API prefix backend : `/api/v1`
+
+## Déploiement (résumé)
+
+Le dépôt inclut des Dockerfiles pour `apps/backend` et `apps/web`, plus un `docker-compose.yml` pour un déploiement local ou CI simple.
+
+Build & run (exemple) :
+
+```bash
+docker-compose up --build
+# backend exposé en production sur 4000 (override), frontend sur 3000
+```
+
+Pour les recommandations de production et les étapes détaillées, consultez `DEPLOYMENT_GUIDE.md`.
+
+## Où obtenir de l'aide
+
+- Documentation backend : `apps/backend/README.md`
+- Documentation frontend : `apps/web/README.md`
+- Guide de déploiement : `DEPLOYMENT_GUIDE.md`
+- Checklist & revues : `CHECKLIST.md`, `CODE_REVIEW_REPORT.md`
+
+Si vous ouvrez une issue, fournissez : description claire, reproduction pas à pas, logs et version (`git rev-parse --short HEAD`).
+
+## Qui maintient et comment contribuer
+
+- Mainteneur principal : regi-gouale (référencé dans le dépôt)
+
+Contributions rapides :
+
+1. Fork / branch depuis `main`
+2. Créez une branche descriptive : `feat/ma-fonctionnalite`
+3. Ajoutez tests et mettez à jour la doc si nécessaire
+4. Lint et tests :
+
+```bash
+pnpm lint && pnpm test && pnpm check-types
+```
+
+5. Ouvrez une Pull Request et attendez les validations CI
+
+Pour les attentes de qualité, consultez `CHECKLIST.md` et `CODE_REVIEW_REPORT.md`.
+
+## Guides et docs complémentaires
+
+- `apps/backend/` — documentation et Swagger pour les endpoints
+- `apps/web/` — guide Frontend + intégration Better Auth
+- `DEPLOYMENT_GUIDE.md` — déploiement et production
+- `CHECKLIST.md` — conventions de contribution et QA
+
+## Licence
+
+Ce dépôt est privé (UNLICENSED). Voir l'entête du projet pour les détails légaux.
+
+---
+
+Si vous voulez que je génère une version README en anglais ou ajoute des badges (CI, coverage, license), dites‑le et je l'ajouterai.
+
 # Badddy - Turborepo Monorepo
 
 Full-stack application with NestJS backend and Next.js frontend, featuring JWT authentication with Better Auth.
