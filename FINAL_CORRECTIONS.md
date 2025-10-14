@@ -81,7 +81,7 @@ const formSchema = z.object({
 });
 ```
 
-**Signup Form** (`apps/web/components/auth/signup-form.tsx`) :
+**Signup Form** (`apps/web/components/auth/register-form.tsx`) :
 
 ```typescript
 const formSchema = z

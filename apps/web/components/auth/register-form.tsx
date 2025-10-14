@@ -67,7 +67,7 @@ const formSchema = z
     message: "Les mots de passe ne correspondent pas.",
   });
 
-export function SignupForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -101,7 +101,8 @@ export function SignupForm({
       "Inscription réussie ! Un e-mail de confirmation a été envoyé."
     );
     form.reset();
-    router.refresh();
+
+    router.push("/verify-email?email=" + encodeURIComponent(data.email));
     setIsLoading(false);
   }
   return (

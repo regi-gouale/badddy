@@ -81,7 +81,7 @@ pnpm --filter web dev
 ### 3. Tester l'authentification
 
 1. Ouvrir `http://localhost:3000`
-2. Créer un compte : `http://localhost:3000/signup`
+2. Créer un compte : `http://localhost:3000/register`
 3. Se connecter
 4. Tester l'endpoint protégé dans la console du navigateur :
 
@@ -206,7 +206,7 @@ pnpm check-types
 │                                                               │
 │  ┌──────────────┐    ┌─────────────┐    ┌────────────────┐  │
 │  │  Better Auth │ -> │  JWT Token  │ -> │  API Client    │  │
-│  │  (Login/Signup)│  │  Generation │    │  (Auto Auth)   │  │
+│  │  (Login/register)│  │  Generation │    │  (Auto Auth)   │  │
 │  └──────────────┘    └─────────────┘    └────────┬───────┘  │
 │                                                    │          │
 └────────────────────────────────────────────────────┼──────────┘

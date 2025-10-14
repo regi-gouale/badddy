@@ -369,7 +369,7 @@ export default function Dashboard() {
 
 - `/` - Page d'accueil
 - `/login` - Connexion
-- `/signup` - Inscription
+- `/register` - Inscription
 
 Pour modifier la liste, éditer `components/providers/api-health-provider.tsx` ligne 28 :
 
@@ -377,7 +377,7 @@ Pour modifier la liste, éditer `components/providers/api-health-provider.tsx` l
 const isPublicRoute =
   pathname === "/" ||
   pathname.startsWith("/login") ||
-  pathname.startsWith("/signup") ||
+  pathname.startsWith("/register") ||
   pathname.startsWith("/about"); // Ajouter d'autres routes
 ```
 

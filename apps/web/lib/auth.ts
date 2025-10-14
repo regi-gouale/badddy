@@ -35,10 +35,6 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     resetPasswordTokenExpiresIn: 1000 * 60 * 15, // 15 minutes
     sendResetPassword: async ({ user, token }) => {
       const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`;
-
-      console.log(
-        `📧 Envoi email de réinitialisation du mot de passe à ${user.email}`
-      );
       console.log(`🔗 Reset URL: ${resetUrl}`);
 
       await emailApiServer.sendResetPasswordEmail({
@@ -48,10 +44,22 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
       });
     },
   },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      await emailApiServer.sendVerificationEmail({
+        to: user.email!,
+        userName: user.name || "Utilisateur",
+        verificationUrl: url,
+      });
+    },
+  },
   plugins: [
-    twoFactor(),
     organization(),
+    twoFactor(),
     jwt(),
     ...(stripePlugin ? [stripePlugin] : []),
   ],
+  trustedOrigins: process.env.NEXT_PUBLIC_BASE_URL
+    ? [process.env.NEXT_PUBLIC_BASE_URL]
+    : ["http://localhost:3000"],
 });

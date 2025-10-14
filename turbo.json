@@ -16,7 +16,8 @@
         "STRIPE_PUBLISHABLE_KEY",
         "STRIPE_WEBHOOK_SECRET",
         "USESEND_APIKEY",
-        "BACKEND_INTERNAL_URL"
+        "BACKEND_INTERNAL_URL",
+        "NODE_ENV"
       ]
     },
     "lint": {
@@ -48,8 +49,10 @@
         "STRIPE_PUBLISHABLE_KEY",
         "STRIPE_WEBHOOK_SECRET",
         "USESEND_APIKEY",
-        "BACKEND_INTERNAL_URL"
+        "BACKEND_INTERNAL_URL",
+        "NODE_ENV"
       ]
     }
-  }
+  },
+  "globalEnv": []
 }

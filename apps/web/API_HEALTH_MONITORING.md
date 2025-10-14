@@ -35,9 +35,9 @@ Le `ApiHealthProvider` est automatiquement intégré dans `app/layout.tsx` :
 
 ```tsx
 <ApiHealthProvider
-  checkInterval={60000}           // Vérification toutes les 60 secondes
-  showNotifications={true}        // Afficher les toasts
-  protectedRoutesOnly={true}      // Vérifier uniquement les routes protégées
+  checkInterval={60000} // Vérification toutes les 60 secondes
+  showNotifications={true} // Afficher les toasts
+  protectedRoutesOnly={true} // Vérifier uniquement les routes protégées
 >
   {/* Votre application */}
 </ApiHealthProvider>
@@ -133,7 +133,7 @@ export function DashboardHeader() {
   return (
     <div className="flex items-center justify-between">
       <h1>Dashboard</h1>
-      <ApiStatusBadge 
+      <ApiStatusBadge
         variant="default"
         showLastCheck={true}
         showRefreshButton={true}
@@ -146,24 +146,28 @@ export function DashboardHeader() {
 ## 🔔 Types de notifications
 
 ### 1. Connexion établie (une seule fois au chargement)
+
 ```
 ✅ Connexion à l'API établie
    Votre session est active et sécurisée
 ```
 
 ### 2. API déconnectée
+
 ```
 ❌ API déconnectée
    Impossible de joindre le serveur. Vérifiez votre connexion.
 ```
 
 ### 3. API reconnectée
+
 ```
 ✅ API reconnectée
    La connexion au serveur est rétablie
 ```
 
 ### 4. Token invalide/expiré
+
 ```
 ❌ Session expirée
    Votre token est invalide ou expiré. Reconnectez-vous.
@@ -171,6 +175,7 @@ export function DashboardHeader() {
 ```
 
 ### 5. Token redevenu valide
+
 ```
 ✅ Token valide
    Votre session est à nouveau active
@@ -180,11 +185,11 @@ export function DashboardHeader() {
 
 ```typescript
 interface ApiHealthStatus {
-  isConnected: boolean;      // API accessible
-  isTokenValid: boolean;     // Token valide
-  isChecking: boolean;       // Vérification en cours
-  lastChecked: Date | null;  // Dernière vérification
-  error: string | null;      // Message d'erreur
+  isConnected: boolean; // API accessible
+  isTokenValid: boolean; // Token valide
+  isChecking: boolean; // Vérification en cours
+  lastChecked: Date | null; // Dernière vérification
+  error: string | null; // Message d'erreur
 }
 ```
 
@@ -193,12 +198,14 @@ interface ApiHealthStatus {
 ### `useApiHealth(options?)`
 
 #### Options
+
 - `checkInterval?: number` - Intervalle de vérification en ms (défaut: 60000)
 - `autoCheck?: boolean` - Vérification automatique (défaut: true)
 - `showNotifications?: boolean` - Afficher les notifications (défaut: true)
 - `onStatusChange?: (status: ApiHealthStatus) => void` - Callback lors du changement
 
 #### Retour
+
 - `status: ApiHealthStatus` - État actuel de la connexion
 - `checkHealth: () => Promise<Result>` - Fonction de vérification manuelle
 - `isReady: boolean` - true si API connectée ET token valide
@@ -251,7 +258,8 @@ return (
   <div>
     {!status.isConnected && (
       <Banner variant="warning">
-        L'API est actuellement indisponible. Certaines fonctionnalités peuvent être limitées.
+        L'API est actuellement indisponible. Certaines fonctionnalités peuvent
+        être limitées.
       </Banner>
     )}
     {/* Reste de l'application */}
@@ -262,12 +270,14 @@ return (
 ## 🧪 Tests
 
 ### Tester la déconnexion
+
 1. Arrêter le serveur backend : `pnpm --filter backend run stop`
 2. Observer le toast "API déconnectée"
 3. Redémarrer : `pnpm --filter backend run dev`
 4. Observer le toast "API reconnectée"
 
 ### Tester l'expiration du token
+
 1. Supprimer le token dans les cookies du navigateur
 2. Attendre la prochaine vérification (max 1 minute)
 3. Observer le toast "Session expirée"
@@ -275,7 +285,7 @@ return (
 ## ⚡ Performance
 
 - **Impact minimal** : Requête GET légère toutes les 60 secondes
-- **Désactivation sur routes publiques** : Ne vérifie pas sur `/`, `/login`, `/signup`
+- **Désactivation sur routes publiques** : Ne vérifie pas sur `/`, `/login`, `/register`
 - **Cache** : Utilise le cache HTTP du navigateur si configuré
 - **Optimisé** : Aucune vérification si l'utilisateur est inactif
 
@@ -289,11 +299,13 @@ return (
 ## 📝 Routes publiques (pas de vérification)
 
 Par défaut, les routes suivantes ne sont **pas vérifiées** :
+
 - `/` (page d'accueil)
 - `/login` (connexion)
-- `/signup` (inscription)
+- `/register` (inscription)
 
 Pour désactiver ce comportement :
+
 ```tsx
 <ApiHealthProvider protectedRoutesOnly={false}>
 ```
@@ -302,10 +314,10 @@ Pour désactiver ce comportement :
 
 ```tsx
 <ApiStatusBadge
-  variant="compact"              // "default" | "compact"
-  showLastCheck={true}           // Afficher la dernière vérification
-  showRefreshButton={true}       // Bouton de rafraîchissement manuel
-  className="custom-class"       // Classes Tailwind personnalisées
+  variant="compact" // "default" | "compact"
+  showLastCheck={true} // Afficher la dernière vérification
+  showRefreshButton={true} // Bouton de rafraîchissement manuel
+  className="custom-class" // Classes Tailwind personnalisées
 />
 ```
 
@@ -334,18 +346,22 @@ Le système distingue deux types d'erreurs :
 ## 🆘 Dépannage
 
 ### Les notifications n'apparaissent pas
+
 - Vérifier que `showNotifications={true}` dans le provider
 - Vérifier que `ToasterProvider` est bien monté
 - Ouvrir la console pour voir les logs
 
 ### Vérification trop fréquente
+
 - Augmenter `checkInterval` (ex: 120000 pour 2 minutes)
 
 ### Badge ne s'affiche pas
+
 - Vérifier l'import : `import { ApiStatusBadge } from "@/components/api-status-badge"`
 - Vérifier que le hook fonctionne dans la console
 
 ### Faux positifs de déconnexion
+
 - Vérifier que `BACKEND_INTERNAL_URL` est correct dans `.env`
 - Vérifier les logs backend pour les erreurs CORS
 

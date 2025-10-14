@@ -37,7 +37,7 @@ export function ApiHealthProvider({
   const isPublicRoute =
     pathname === "/" ||
     pathname.startsWith("/login") ||
-    pathname.startsWith("/signup");
+    pathname.startsWith("/register");
 
   const shouldCheck = !protectedRoutesOnly || !isPublicRoute;
 
