@@ -27,11 +27,16 @@ class Logger {
       context,
       error:
         error instanceof Error
-          ? {
-              name: error.name,
-              message: error.message,
-              stack: error.stack,
-            }
+          ? process.env.NODE_ENV === "production"
+            ? {
+                name: error.name,
+                message: error.message,
+              }
+            : {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+              }
           : error,
     };
 
