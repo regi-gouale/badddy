@@ -54,8 +54,8 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
     },
   },
   plugins: [
-    twoFactor(),
     organization(),
+    twoFactor(),
     jwt(),
     ...(stripePlugin ? [stripePlugin] : []),
   ],

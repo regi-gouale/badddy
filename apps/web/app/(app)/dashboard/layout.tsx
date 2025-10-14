@@ -23,12 +23,12 @@ export default async function DashboardLayout({
       <div className="size-full flex flex-1 items-center justify-center p-4 min-h-screen">
         <Card className="w-full max-w-sm">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Access Denied</CardTitle>
+            <CardTitle className="text-2xl font-bold">Accès refusé</CardTitle>
           </CardHeader>
           <CardDescription className="mb-4 p-8 text-center">
-            <p>You must be logged in to view this page.</p>
+            <p>Vous devez être connecté pour voir cette page.</p>
             <Button asChild variant="outline" className="mt-4">
-              <Link href="/login">Go to Login</Link>
+              <Link href="/login">Aller à la connexion</Link>
             </Button>
           </CardDescription>
         </Card>
@@ -37,15 +37,7 @@ export default async function DashboardLayout({
   }
   return (
     <div className="min-h-screen size-full flex flex-1 items-center p-4">
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 min-h-screen border-r">
-          <nav className="p-4">{/* Add navigation items here */}</nav>
-        </aside>
-
-        {/* Main content */}
-        <main className="flex-1 p-8">{children}</main>
-      </div>
+      <main className="flex-1 p-8">{children}</main>
     </div>
   );
 }

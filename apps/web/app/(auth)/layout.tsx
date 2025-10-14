@@ -21,12 +21,18 @@ export default async function AuthLayout({
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-background">
       <div className="pointer-events-none absolute inset-x-0 -top-40 h-[480px] bg-[radial-gradient(circle_at_top,_theme(colors.primary/20),_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_theme(colors.primary/15),_transparent_60%)]" />
       <header className="relative z-10 border-b border-border/80 bg-background/80 backdrop-blur">
-        <div className="container mx-auto flex h-10 items-center justify-between px-4 lg:px-8">
+        <div className="container mx-auto h-10 grid grid-cols-3 items-center justify-center">
           <Link
             href="/"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             ← Retour à l&apos;accueil
+          </Link>
+          <Link
+            href="/"
+            className="font-bold text-primary text-center transition-colors hover:text-primary/80 text-xl"
+          >
+            Badddy
           </Link>
         </div>
       </header>
