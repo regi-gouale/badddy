@@ -1,5 +1,6 @@
 import { CreateOrganizationForm } from "@/components/organization/create-organization-form";
 import { auth } from "@/lib/auth";
+import { getActiveOrganizationId } from "@/types/auth-client";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,9 +15,8 @@ export default async function CreateOrganizationPage() {
     redirect("/login");
   }
 
-  const activeOrganizationId = (
-    session.session as { activeOrganizationId?: string | null } | undefined
-  )?.activeOrganizationId;
+  // Utilisation du helper type-safe
+  const activeOrganizationId = getActiveOrganizationId(session);
 
   if (activeOrganizationId) {
     redirect("/dashboard");
