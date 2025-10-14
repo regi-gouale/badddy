@@ -66,10 +66,16 @@ const DIGIT_SUFFIX_LENGTH = 4;
  * Note: En production, la génération devrait être déléguée au backend
  * pour garantir l'unicité via vérification DB
  */
+const MAX_SLUG_LENGTH = 50;
+const MIN_BASE_LENGTH = 1;
+
 const generateSlug = (value: string) => {
   const baseCandidate = normalizeSlugBase(value) || "organisation";
-  const maxBaseLength = 50 - (DIGIT_SUFFIX_LENGTH + 1); // hyphen + digits
-  const truncatedBase = baseCandidate.slice(0, Math.max(1, maxBaseLength));
+  const maxBaseLength = MAX_SLUG_LENGTH - (DIGIT_SUFFIX_LENGTH + 1); // hyphen + digits
+  const truncatedBase = baseCandidate.slice(
+    0,
+    Math.max(MIN_BASE_LENGTH, maxBaseLength)
+  );
   const digits = Math.floor(Math.random() * 10 ** DIGIT_SUFFIX_LENGTH)
     .toString()
     .padStart(DIGIT_SUFFIX_LENGTH, "0");

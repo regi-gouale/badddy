@@ -26,7 +26,8 @@ type VerifyEmailPageProps = {
  */
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email) && email.length <= 254; // RFC 5321
+  const MAX_EMAIL_LENGTH = 254; // RFC 5321
+  return emailRegex.test(email) && email.length <= MAX_EMAIL_LENGTH;
 }
 
 export default async function VerifyEmailPage({

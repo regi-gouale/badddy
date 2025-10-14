@@ -28,7 +28,7 @@ export async function isEmailVerified(email: string): Promise<boolean> {
     logger.error("Failed to check email verification status", error, {
       component: "DAL.users",
       action: "isEmailVerified",
-      email: email.substring(0, 3) + "***", // Log partiel pour privacy
+      emailHash: Buffer.from(email).toString("base64").substring(0, 8),
     });
 
     // En cas d'erreur DB, retourner false pour forcer la vérification
