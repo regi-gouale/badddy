@@ -54,5 +54,5 @@
       ]
     }
   },
-  "globalEnv": ["NODE_ENV"]
+  "globalEnv": []
 }
