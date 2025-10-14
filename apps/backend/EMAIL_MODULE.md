@@ -231,7 +231,7 @@ export async function sendWelcomeEmail(email: string, userName: string) {
 ### Dans un composant de signup
 
 ```typescript
-// components/auth/signup-form.tsx
+// components/auth/register-form.tsx
 import { sendVerificationEmail } from '@/lib/email-api';
 
 async function handleSignup(email: string, password: string) {

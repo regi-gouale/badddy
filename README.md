@@ -146,7 +146,7 @@ badddy/
 │   └── web/                  # Next.js frontend
 │       ├── app/              # App Router
 │       │   ├── (marketing)/  # Public pages
-│       │   ├── (auth)/       # Login/Signup
+│       │   ├── (auth)/       # Login/register
 │       │   └── (app)/        # Protected dashboard
 │       ├── components/       # UI components
 │       ├── lib/              # Auth config & API client
@@ -278,7 +278,7 @@ The E2E tests verify that:
    pnpm dev
    ```
 
-2. Visit `http://localhost:3000/signup` and create an account
+2. Visit `http://localhost:3000/register` and create an account
 
 3. Try calling the backend:
 

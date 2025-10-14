@@ -183,7 +183,7 @@ export function LoginForm({
                   <WithGoogleButton label="Se connecter" />
                   <FieldDescription className="text-center">
                     Vous n&apos;avez pas de compte ?{" "}
-                    <Link href="/signup" className="font-semibold">
+                    <Link href="/register" className="font-semibold">
                       Inscrivez-vous
                     </Link>
                   </FieldDescription>

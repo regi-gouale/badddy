@@ -181,7 +181,7 @@ pnpm --filter backend test:e2e
    pnpm dev
    ```
 
-2. Créer un compte sur `http://localhost:3000/signup`
+2. Créer un compte sur `http://localhost:3000/register`
 
 3. Tester l'endpoint protégé dans la console :
 
