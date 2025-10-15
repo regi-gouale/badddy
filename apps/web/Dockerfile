@@ -32,10 +32,10 @@ RUN pnpm run deploy-build
 # STAGE 2 : Run
 # -----------------------------
 FROM builder AS runner
-WORKDIR /app/apps/web
+WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "--filter", "web", "start"]
