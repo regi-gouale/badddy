@@ -5,16 +5,11 @@ ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-# Copier artefacts de build
 COPY --from=builder /app/apps/web/.next ./.next
 COPY --from=builder /app/apps/web/public ./public
 COPY --from=builder /app/apps/web/package.json ./package.json
-# Copier lockfile racine requis par pnpm
-COPY --from=builder /app/pnpm-lock.yaml ../pnpm-lock.yaml
+# Copier node_modules si présents dans builder
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/apps/web/node_modules /app/apps/web/node_modules
 
-# Installer les dépendances de production en s'appuyant sur le lockfile
-WORKDIR /app
-RUN pnpm install --prod --frozen-lockfile --filter ./apps/web...
-
-WORKDIR /app/apps/web
 CMD ["pnpm", "start"]
