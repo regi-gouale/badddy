@@ -23,10 +23,10 @@ COPY . .
 
 
 # Builder le frontend
-WORKDIR /app/apps/web
-RUN pnpm install --frozen-lockfile
+WORKDIR /app
+RUN pnpm --filter web install --frozen-lockfile
 # RUN ls -la ../ && sleep 90
-RUN pnpm run deploy-build
+RUN pnpm --filter web run deploy-build
 
 # -----------------------------
 # STAGE 2 : Run
